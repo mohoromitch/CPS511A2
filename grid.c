@@ -192,6 +192,10 @@ void generate_normals() {
 	}
 } 
 
+void test_normals() {
+	vertices[1] = -10;
+}
+
 
 //Returns cross product from given three vertices
 //First vertex is the origin point

@@ -21,10 +21,15 @@
 #include "CubeMesh.h"
 #include "QuadMesh.h"
 #include "grid.h"
+#include "camera.h"
 
 const int meshSize = 16;    // Default Mesh Size
 const int vWidth = 650;     // Viewport width in pixels
 const int vHeight = 500;    // Viewport height in pixels
+
+float xzAngle = -45;
+float yAngle = -45;
+float angleDelta = 1;
 
 static int currentButton;
 static unsigned char currentKey;
@@ -142,6 +147,7 @@ void initOpenGL(int w, int h)
 // or glutPostRedisplay() has been called.
 void display(void)
 {
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Draw Submarine
@@ -180,13 +186,14 @@ void reshape(int w, int h)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60.0, (GLdouble)w / h, 0.2, 40.0);
+    gluPerspective(60.0, (GLdouble)w / h, 0.2, 400.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // Set up the camera at position (0, 6, 22) looking at the origin, up along positive y axis
-    gluLookAt(0.0, 6.0, 22.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    //gluLookAt(0.0, 6.0, 22.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    position_camera(xzAngle, yAngle);
 }
 
 // Callback, handles input from the keyboard, non-arrow keys
@@ -195,9 +202,23 @@ void keyboard(unsigned char key, int x, int y)
     switch (key)
     {
     case 't':
-
+        test_normals();
+        generate_normals();
+        break;
+    case 'a':
+        xzAngle += angleDelta;
+        break;
+    case 'd':
+        xzAngle -= angleDelta;
+        break;
+    case 'w':
+        yAngle += angleDelta;
+        break;
+    case 's':
+        yAngle -= angleDelta;
         break;
     }
+    position_camera(xzAngle, yAngle);
 
     glutPostRedisplay();   // Trigger a window redisplay
 }
